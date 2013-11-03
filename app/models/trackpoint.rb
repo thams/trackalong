@@ -159,8 +159,8 @@ class Trackpoint < ActiveRecord::Base
     # TODO: handle case where result isn't HTTPOK
     if gresponse.class == Net::HTTPOK
       gdoc = Nokogiri::XML gresponse.body
-      g_elevation = gdoc.xpath("//elevation").text
-      self.terrain_elevation = g_elevation
+      g_elevation_meters = gdoc.xpath("//elevation").text
+      self.terrain_elevation = (g_elevation_meters.to_f * 3.28084).round.to_s
     else
       # TODO: needs unit test
       ex = RuntimeError.new("Couldn't get terrain elevation from Google #{gresponse}")
@@ -177,10 +177,11 @@ class Trackpoint < ActiveRecord::Base
     "Lat: #{latitude} Lon: #{longitude} Alt: #{altitude} Elev: #{terrain_elevation}"
   end
 
-
+  # @return altitude in feet
   def altitude
     @doc.present? || process
-    @doc.xpath("//xmlns:Data[@name='Altitude']/xmlns:value").text
+    meters = @doc.xpath("//xmlns:Data[@name='Altitude']/xmlns:value").text
+    (meters.to_f * 3.28084).round.to_s
   end
 
   def longitude
@@ -193,9 +194,11 @@ class Trackpoint < ActiveRecord::Base
     @doc.xpath("//xmlns:Data[@name='Latitude']/xmlns:value").text
   end
 
+  # @return ground velocity in knots
   def ground_velocity
     @doc.present? || process
-    @doc.xpath("//xmlns:Data[@name='GroundVelocity']/xmlns:value").text
+    kmh = @doc.xpath("//xmlns:Data[@name='GroundVelocity']/xmlns:value").text
+    knots = (kmh.to_i * 0.539957).round.to_s
   end
 
   def event_type

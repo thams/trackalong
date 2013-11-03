@@ -32,11 +32,12 @@ describe Trackpoint do
 
   it "should do something sensible to find previous Observation"
 
-  it "should figure I'm going fast" do
+  it "should figure if I'm going fast" do
     f = File.read "spec/data/2013-09-05-c16-24-26.xml"
     tox = Trackpoint.make(f)
+    tox.ground_velocity.should == "33"
     tox.response.should_not be_nil
-    tox.should be_moving_fast
+    tox.should_not be_moving_fast
   end
 
   it "should figure out I'm aloft" do
@@ -104,6 +105,23 @@ describe Trackpoint do
     b = Trackpoint.make(f)
     b.should_receive :notify_about_takeoff
 
+    b.stub(:took_off?).and_return true
+    b.process
+    b.process_events
+  end
+
+  it "should use feet and knots" do
+    f = File.read "spec/data/landing_1.xml"
+    b = Trackpoint.make(f)
+    b.ground_velocity.should == "75"
+    b.altitude.should == "4500"
+    b.terrain_elevation.should == "2305"
+  end
+
+  it "should tweet altitudes and elevations in feet, not meters" do
+    f = File.read "spec/data/landing_1.xml" # needs the fields for the tweet description.
+    b = Trackpoint.make(f)
+    b.should_receive(:tweet_this).with(/Alt: 4500 Elev: 2305/).twice # twice: one for takeoff and one for moving
     b.stub(:took_off?).and_return true
     b.process
     b.process_events
