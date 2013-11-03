@@ -160,7 +160,7 @@ class Trackpoint < ActiveRecord::Base
     if gresponse.class == Net::HTTPOK
       gdoc = Nokogiri::XML gresponse.body
       g_elevation_meters = gdoc.xpath("//elevation").text
-      self.terrain_elevation = (g_elevation_meters.to_f * 3.28084).round.to_s
+      self.terrain_elevation = (Trackpoint.meters_to_feet(g_elevation_meters.to_f)).round.to_s
     else
       # TODO: needs unit test
       ex = RuntimeError.new("Couldn't get terrain elevation from Google #{gresponse}")
@@ -169,7 +169,7 @@ class Trackpoint < ActiveRecord::Base
   end
 
   def text_summary(last_observation = nil)
-    distance_info = "distance #{(distance(last_observation)).to_i} M" if last_observation
+    distance_info = "distance #{(distance(last_observation)).to_i} feet" if last_observation
     "Aloft: #{aloft?} Moving: #{moving?} Fast: #{moving_fast?} Lat: #{latitude} Lon: #{longitude} Alt: #{altitude} Elev: #{terrain_elevation} #{altitude.to_f - terrain_elevation.to_f} #{event_type} #{kml_id} #{distance_info}"
   end
 
@@ -181,7 +181,7 @@ class Trackpoint < ActiveRecord::Base
   def altitude
     @doc.present? || process
     meters = @doc.xpath("//xmlns:Data[@name='Altitude']/xmlns:value").text
-    (meters.to_f * 3.28084).round.to_s
+    (Trackpoint.meters_to_feet(meters.to_f)).round.to_s
   end
 
   def longitude
@@ -197,8 +197,8 @@ class Trackpoint < ActiveRecord::Base
   # @return ground velocity in knots
   def ground_velocity
     @doc.present? || process
-    kmh = @doc.xpath("//xmlns:Data[@name='GroundVelocity']/xmlns:value").text
-    knots = (kmh.to_i * 0.539957).round.to_s
+    kph = @doc.xpath("//xmlns:Data[@name='GroundVelocity']/xmlns:value").text
+    knots = (Trackpoint.kph_to_knots(kph.to_f)).round.to_s
   end
 
   def event_type
@@ -212,13 +212,16 @@ class Trackpoint < ActiveRecord::Base
     @doc.xpath("//xmlns:Data[@name='Id']/xmlns:value").text
   end
 
+  # @return distance in feet between self and argument
   def distance(a_tracker_obs)
     # TODO: make something more sensible if a_tracker_obs is nil
+    # TODO: needs unit test
     return "n/a" unless a_tracker_obs
     gr = GeoRuby::SimpleFeatures::Geometry.from_kml(response)
     other = GeoRuby::SimpleFeatures::Geometry.from_kml(a_tracker_obs.response)
     line_string = GeoRuby::SimpleFeatures::LineString.from_points [other, gr]
     distance = line_string.spherical_distance
+    Trackpoint.meters_to_feet(distance)
     # distance2 = last_point.spherical_distance(gr)
   end
 
@@ -264,6 +267,15 @@ class Trackpoint < ActiveRecord::Base
   def previous_observation
     return nil unless self.id # This just here for spec test objects that haven't been saved.
     Trackpoint.find_by_id(self.id - 1)
+  end
+
+  # @return arg converted from meters to NM
+  def self.meters_to_feet(meters)
+    meters * 3.28084
+  end
+
+  def self.kph_to_knots(kph)
+    kph * 0.539957
   end
 
 end

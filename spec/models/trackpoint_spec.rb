@@ -3,15 +3,15 @@ require 'spec_helper'
 describe Trackpoint do
 
   #it "should summarize" do
-  #  # this is not really a test, just used for debugging previously-grabbed data
+  #  # this is not a test, just used for debugging previously-grabbed data
   #
   #  last_obs = nil
-  #  Dir["data/*.xml"].each do |filename|
-  #    next unless File.file?(filename)
-  #    tox = Trackpoint.make(File.read(filename))
-  #    tox.save!
-  #    p tox.text_summary(last_obs)
-  #    last_obs = tox
+  #  #points = YAML.load_file("scratch_data/tracker_observations.yml")
+  #  points = YAML.load_stream(File.open("scratch_data/tracker_observations.yml"))
+  #  points.each do |point|
+  #    r = Trackpoint.create(point.first[1])
+  #    p r.text_summary(last_obs)
+  #    last_obs = r
   #  end
   #end
 
@@ -35,7 +35,7 @@ describe Trackpoint do
   it "should figure if I'm going fast" do
     f = File.read "spec/data/2013-09-05-c16-24-26.xml"
     tox = Trackpoint.make(f)
-    tox.ground_velocity.should == "33"
+    tox.ground_velocity.should == "34"
     tox.response.should_not be_nil
     tox.should_not be_moving_fast
   end
