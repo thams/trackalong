@@ -63,18 +63,18 @@ class Trackpoint < ActiveRecord::Base
     # TODO: this is not correct if items aren't loaded in order, or if tracking more than one user.
     last_observation = Trackpoint.last
 
-    tracker_obs = Trackpoint.make(some_xml)
+    trpt = Trackpoint.make(some_xml)
 
-    if tracker_obs.kml_id == last_observation.try(:kml_id)
+    if trpt.kml_id == last_observation.try(:kml_id)
       # Don't save it if it isn't a new data point
-      return tracker_obs
+      return trpt
     end
 
-    tracker_obs.save!
+    trpt.save!
 
-    tracker_obs.process_events
+    trpt.process_events
 
-    return tracker_obs
+    return trpt
 
   end
 
