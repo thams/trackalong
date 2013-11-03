@@ -29,8 +29,11 @@ Features TODO
 * send a message whenever it detects you moved by say 25 miles, or your altitude gained or dropped by say 3000 feet
 * provides distance from nearest turnpoint
 * try to detect service outages:
+
     if you receive 20 trackpoints from Jimbo and Pete then silence for 30 minutes, from both of them,
+
     probably a service outage. But if only one is not showing, probably Jimbo's tracker is off.
+
     If service outage, nag someone.
 
 Document TODO
@@ -38,7 +41,9 @@ Document TODO
 * Where to go to learn how to set up a Twitter app
 * Where to go to get an airbrake account
 * Minimum requirements for use
+
     able to run a bot
+
     twitter account and application
 
 
