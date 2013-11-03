@@ -20,7 +20,6 @@ TODO
 
 Features TODO
 =============
-* Make reports show in feet, not meters.
 * Tweets have a link to Google Maps or the Delorme page.
 * Show takeoffs and landings in terms of nearest airport or city, distance thereof
 * Make airbrake optional
