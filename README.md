@@ -1,7 +1,8 @@
 trackalong
 ==========
 
-Polls personal tracking devices and sends notifications (via Twitter) upon interesting events
+Polls personal satellite tracking devices and sends notifications (via Twitter) upon
+interesting events, such as the user taking off or landing.
 
 Currently supports DeLorme InReach device.
 In the future should support SPOT trackers.
@@ -11,8 +12,6 @@ TODO
 * make an example config/api_keys.yml, and put instructions in the README
 * make an example config/database.yml
 * restore test data, anonymized
-* grep for oauth_ (indicates keys that shouldn't be there)
-* what do you do about secret_token.rb ?
 * Use VCR's filter_sensitive_data feature to remove API keys
     What is proper way to isolate some, but not all VCR requests?
     https://groups.google.com/forum/?fromgroups=#!topic/vcr-ruby/OZfZR5OROdc
@@ -20,7 +19,7 @@ TODO
 
 Features TODO
 =============
-* Tweets have a link to Google Maps or the Delorme page.
+* Tweets have a link to the Delorme page.
 * Show takeoffs and landings in terms of nearest airport or city, distance thereof
 * Make airbrake optional
 * Make this work for multiple users

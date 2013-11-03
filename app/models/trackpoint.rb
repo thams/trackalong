@@ -108,29 +108,35 @@ class Trackpoint < ActiveRecord::Base
     end
   end
 
+  def now_ish
+    # TODO: This is using server time. But should really be taking the value from
+    # the KML, since polling could make this off by a while, and test data will
+    # not be repeatable
+    Time.now.strftime("%H:%M %Z")
+  end
 
   def notify_about_takeoff
-    msg = "Took off at #{Time.now.to_s} #{tweet_text_summary}"
+    msg = "Took off at #{now_ish} #{tweet_text_summary}"
     logger.info msg
     tweet_this msg
   end
 
   def notify_about_landing
-    msg = "Landed at #{Time.now.to_s} #{tweet_text_summary}"
+    msg = "Landed at #{now_ish} #{tweet_text_summary}"
     logger.info msg
     tweet_this msg
   end
 
   # TODO: unit test
   def notify_about_started_moving
-    msg = "Started moving at #{Time.now.to_s} #{tweet_text_summary}"
+    msg = "Moving at #{now_ish} #{tweet_text_summary}"
     logger.info msg
     tweet_this msg
   end
 
   # TODO: unit test
   def notify_about_stopped_moving
-    msg = "Stopped moving at #{Time.now.to_s} #{tweet_text_summary}"
+    msg = "Stopped at #{now_ish} #{tweet_text_summary}"
     logger.info msg
     tweet_this msg
   end
@@ -174,7 +180,8 @@ class Trackpoint < ActiveRecord::Base
   end
 
   def tweet_text_summary(last_observation = nil)
-    "Lat: #{latitude} Lon: #{longitude} Alt: #{altitude} Elev: #{terrain_elevation}"
+    # TODO: make this do something sensible if the tweet is going to be truncated
+    "Lat: #{latitude} Lon: #{longitude} Alt: #{altitude} Elev: #{terrain_elevation} http://maps.google.com/maps?q=#{latitude},#{longitude}"
   end
 
   # @return altitude in feet
