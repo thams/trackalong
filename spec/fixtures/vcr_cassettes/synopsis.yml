@@ -1,0 +1,104 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://explore.delorme.com/Feed/Share/JoeTesterman
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - ! '*/*'
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - private, s-maxage=0
+      Content-Type:
+      - application/vnd.google-earth.kml+xml
+      Server:
+      - Microsoft-IIS/7.5
+      X-Aspnetmvc-Version:
+      - '4.0'
+      Content-Disposition:
+      - attachment; filename=feed.kml
+      X-Aspnet-Version:
+      - 4.0.30319
+      App-Version:
+      - '2'
+      X-Powered-By:
+      - ASP.NET
+      Date:
+      - Fri, 01 Nov 2013 06:22:16 GMT
+      Connection:
+      - close
+      Content-Length:
+      - '4994'
+    body:
+      encoding: US-ASCII
+      string: ! "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<kml xmlns=\"http://www.opengis.net/kml/2.2\">\r\n
+        \ <Document>\r\n    <name>KML Export 11/1/2013 6:22:16 AM</name>\r\n    <Style
+        id=\"style_emergency\">\r\n      <IconStyle>\r\n        <colorMode>normal</colorMode>\r\n
+        \       <Icon>\r\n          <href>http://maps.google.com/mapfiles/kml/shapes/caution.png</href>\r\n
+        \       </Icon>\r\n      </IconStyle>\r\n      <BalloonStyle>\r\n        <text><![CDATA[<table><tr><td>
+        Id</td><td> $[Id] </td></tr><tr><td> EventTimeStamp</td><td> $[EventTimeStamp]
+        </td></tr><tr><td> FirstName</td><td> $[FirstName] </td></tr><tr><td> LastName</td><td>
+        $[LastName] </td></tr><tr><td> DeviceType</td><td> $[DeviceType] </td></tr><tr><td>
+        IMEI</td><td> $[IMEI] </td></tr><tr><td> ServiceType</td><td> $[ServiceType]
+        </td></tr><tr><td> Direction</td><td> $[Direction] </td></tr><tr><td> IncidentId</td><td>
+        $[IncidentId] </td></tr><tr><td> Latitude</td><td> $[Latitude] </td></tr><tr><td>
+        Longitude</td><td> $[Longitude] </td></tr><tr><td> Altitude</td><td> $[Altitude]
+        </td></tr><tr><td> GroundVelocity</td><td> $[GroundVelocity] </td></tr><tr><td>
+        ValidGpsString</td><td> $[ValidGpsString] </td></tr><tr><td> ValidGps</td><td>
+        $[ValidGps] </td></tr><tr><td> InEmergency</td><td> $[InEmergency] </td></tr><tr><td>
+        Text</td><td> $[Text] </td></tr><tr><td> EventType</td><td> $[EventType] </td></tr><tr><td>
+        UserId</td><td> $[UserId] </td></tr></table>]]></text>\r\n      </BalloonStyle>\r\n
+        \   </Style>\r\n    <Style id=\"style_18475\">\r\n      <IconStyle>\r\n        <color>ffc6964f</color>\r\n
+        \       <colorMode>normal</colorMode>\r\n        <Icon>\r\n          <href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href>\r\n
+        \       </Icon>\r\n      </IconStyle>\r\n      <BalloonStyle>\r\n        <text><![CDATA[<table><tr><td>
+        Id</td><td> $[Id] </td></tr><tr><td> EventTimeStamp</td><td> $[EventTimeStamp]
+        </td></tr><tr><td> FirstName</td><td> $[FirstName] </td></tr><tr><td> LastName</td><td>
+        $[LastName] </td></tr><tr><td> DeviceType</td><td> $[DeviceType] </td></tr><tr><td>
+        IMEI</td><td> $[IMEI] </td></tr><tr><td> ServiceType</td><td> $[ServiceType]
+        </td></tr><tr><td> Direction</td><td> $[Direction] </td></tr><tr><td> IncidentId</td><td>
+        $[IncidentId] </td></tr><tr><td> Latitude</td><td> $[Latitude] </td></tr><tr><td>
+        Longitude</td><td> $[Longitude] </td></tr><tr><td> Altitude</td><td> $[Altitude]
+        </td></tr><tr><td> GroundVelocity</td><td> $[GroundVelocity] </td></tr><tr><td>
+        ValidGpsString</td><td> $[ValidGpsString] </td></tr><tr><td> ValidGps</td><td>
+        $[ValidGps] </td></tr><tr><td> InEmergency</td><td> $[InEmergency] </td></tr><tr><td>
+        Text</td><td> $[Text] </td></tr><tr><td> EventType</td><td> $[EventType] </td></tr><tr><td>
+        UserId</td><td> $[UserId] </td></tr></table>]]></text>\r\n      </BalloonStyle>\r\n
+        \   </Style>\r\n    <Folder>\r\n      <name>Joe Testerman</name>\r\n      <Placemark>\r\n
+        \       <name>Joe Testerman</name>\r\n        <visibility>true</visibility>\r\n
+        \       <description />\r\n        <styleUrl>#style_18475</styleUrl>\r\n        <ExtendedData>\r\n
+        \         <Data name=\"Id\">\r\n            <value>6903980</value>\r\n          </Data>\r\n
+        \         <Data name=\"EventTimeStamp\">\r\n            <value>10/27/2013
+        4:57:00 PM</value>\r\n          </Data>\r\n          <Data name=\"FirstName\">\r\n
+        \           <value>Testerman</value>\r\n          </Data>\r\n          <Data name=\"LastName\">\r\n
+        \           <value>Joe</value>\r\n          </Data>\r\n          <Data name=\"DeviceType\">\r\n
+        \           <value>inReach SE</value>\r\n          </Data>\r\n          <Data
+        name=\"IMEI\">\r\n            <value>300434060605400</value>\r\n          </Data>\r\n
+        \         <Data name=\"ServiceType\">\r\n            <value>Tracking</value>\r\n
+        \         </Data>\r\n          <Data name=\"Direction\">\r\n            <value>Mobile
+        Originated</value>\r\n          </Data>\r\n          <Data name=\"IncidentId\">\r\n
+        \           <value>0</value>\r\n          </Data>\r\n          <Data name=\"Latitude\">\r\n
+        \           <value>36.857135</value>\r\n          </Data>\r\n          <Data
+        name=\"Longitude\">\r\n            <value>-121.520075</value>\r\n          </Data>\r\n
+        \         <Data name=\"Altitude\">\r\n            <value>55.00</value>\r\n
+        \         </Data>\r\n          <Data name=\"GroundVelocity\">\r\n            <value>90.1</value>\r\n
+        \         </Data>\r\n          <Data name=\"ValidGpsString\">\r\n            <value>Yes</value>\r\n
+        \         </Data>\r\n          <Data name=\"ValidGps\">\r\n            <value>True</value>\r\n
+        \         </Data>\r\n          <Data name=\"InEmergency\">\r\n            <value>False</value>\r\n
+        \         </Data>\r\n          <Data name=\"Text\">\r\n            <value
+        />\r\n          </Data>\r\n          <Data name=\"EventType\">\r\n            <value>TrackingTurnedOffFromDevice</value>\r\n
+        \         </Data>\r\n          <Data name=\"UserId\">\r\n            <value>12345</value>\r\n
+        \         </Data>\r\n        </ExtendedData>\r\n        <Point>\r\n          <extrude>false</extrude>\r\n
+        \         <altitudeMode>absolute</altitudeMode>\r\n          <coordinates>-121.520075,36.857135,55</coordinates>\r\n
+        \       </Point>\r\n      </Placemark>\r\n    </Folder>\r\n  </Document>\r\n</kml>"
+    http_version: 
+  recorded_at: Fri, 01 Nov 2013 06:22:16 GMT
+recorded_with: VCR 2.2.2

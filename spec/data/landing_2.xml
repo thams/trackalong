@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>KML Export 10/22/2013 5:02:28 AM</name>
+    <Style id="style_emergency">
+      <IconStyle>
+        <colorMode>normal</colorMode>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/shapes/caution.png</href>
+        </Icon>
+      </IconStyle>
+      <BalloonStyle>
+        <text><![CDATA[<table><tr><td> Id</td><td> $[Id] </td></tr><tr><td> EventTimeStamp</td><td> $[EventTimeStamp] </td></tr><tr><td> FirstName</td><td> $[FirstName] </td></tr><tr><td> LastName</td><td> $[LastName] </td></tr><tr><td> DeviceType</td><td> $[DeviceType] </td></tr><tr><td> IMEI</td><td> $[IMEI] </td></tr><tr><td> ServiceType</td><td> $[ServiceType] </td></tr><tr><td> Direction</td><td> $[Direction] </td></tr><tr><td> IncidentId</td><td> $[IncidentId] </td></tr><tr><td> Latitude</td><td> $[Latitude] </td></tr><tr><td> Longitude</td><td> $[Longitude] </td></tr><tr><td> Altitude</td><td> $[Altitude] </td></tr><tr><td> GroundVelocity</td><td> $[GroundVelocity] </td></tr><tr><td> ValidGpsString</td><td> $[ValidGpsString] </td></tr><tr><td> ValidGps</td><td> $[ValidGps] </td></tr><tr><td> InEmergency</td><td> $[InEmergency] </td></tr><tr><td> Text</td><td> $[Text] </td></tr><tr><td> EventType</td><td> $[EventType] </td></tr><tr><td> UserId</td><td> $[UserId] </td></tr></table>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="style_18475">
+      <IconStyle>
+        <color>ffc6964f</color>
+        <colorMode>normal</colorMode>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href>
+        </Icon>
+      </IconStyle>
+      <BalloonStyle>
+        <text><![CDATA[<table><tr><td> Id</td><td> $[Id] </td></tr><tr><td> EventTimeStamp</td><td> $[EventTimeStamp] </td></tr><tr><td> FirstName</td><td> $[FirstName] </td></tr><tr><td> LastName</td><td> $[LastName] </td></tr><tr><td> DeviceType</td><td> $[DeviceType] </td></tr><tr><td> IMEI</td><td> $[IMEI] </td></tr><tr><td> ServiceType</td><td> $[ServiceType] </td></tr><tr><td> Direction</td><td> $[Direction] </td></tr><tr><td> IncidentId</td><td> $[IncidentId] </td></tr><tr><td> Latitude</td><td> $[Latitude] </td></tr><tr><td> Longitude</td><td> $[Longitude] </td></tr><tr><td> Altitude</td><td> $[Altitude] </td></tr><tr><td> GroundVelocity</td><td> $[GroundVelocity] </td></tr><tr><td> ValidGpsString</td><td> $[ValidGpsString] </td></tr><tr><td> ValidGps</td><td> $[ValidGps] </td></tr><tr><td> InEmergency</td><td> $[InEmergency] </td></tr><tr><td> Text</td><td> $[Text] </td></tr><tr><td> EventType</td><td> $[EventType] </td></tr><tr><td> UserId</td><td> $[UserId] </td></tr></table>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Folder>
+      <name>Joe Testerman</name>
+      <Placemark>
+        <name>Joe Testerman</name>
+        <visibility>true</visibility>
+        <description />
+        <styleUrl>#style_18475</styleUrl>
+        <ExtendedData>
+          <Data name="Id">
+            <value>6777032</value>
+          </Data>
+          <Data name="EventTimeStamp">
+            <value>10/20/2013 6:15:00 PM</value>
+          </Data>
+          <Data name="FirstName">
+            <value>Testerman</value>
+          </Data>
+          <Data name="LastName">
+            <value>Joe</value>
+          </Data>
+          <Data name="DeviceType">
+            <value>inReach SE</value>
+          </Data>
+          <Data name="IMEI">
+            <value>300434060605400</value>
+          </Data>
+          <Data name="ServiceType">
+            <value>Tracking</value>
+          </Data>
+          <Data name="Direction">
+            <value>Mobile Originated</value>
+          </Data>
+          <Data name="IncidentId">
+            <value>0</value>
+          </Data>
+          <Data name="Latitude">
+            <value>36.907066</value>
+          </Data>
+          <Data name="Longitude">
+            <value>-121.403840</value>
+          </Data>
+          <Data name="Altitude">
+            <value>52.00</value>
+          </Data>
+          <Data name="GroundVelocity">
+            <value>0.0</value>
+          </Data>
+          <Data name="ValidGpsString">
+            <value>Yes</value>
+          </Data>
+          <Data name="ValidGps">
+            <value>True</value>
+          </Data>
+          <Data name="InEmergency">
+            <value>False</value>
+          </Data>
+          <Data name="Text">
+            <value />
+          </Data>
+          <Data name="EventType">
+            <value>TrackingIntervalReceived</value>
+          </Data>
+          <Data name="UserId">
+            <value>12345</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <extrude>false</extrude>
+          <altitudeMode>absolute</altitudeMode>
+          <coordinates>-121.40384,36.907066,52</coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>
