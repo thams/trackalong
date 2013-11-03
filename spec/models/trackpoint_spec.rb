@@ -33,7 +33,7 @@ describe Trackpoint do
   it "should do something sensible to find previous Observation"
 
   it "should figure I'm going fast" do
-    f = File.read "data/2013-09-05-c16-24-26.xml"
+    f = File.read "spec/data/2013-09-05-c16-24-26.xml"
     tox = Trackpoint.make(f)
     tox.response.should_not be_nil
     tox.should be_moving_fast
