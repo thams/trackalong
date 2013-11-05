@@ -81,8 +81,10 @@ class Trackpoint < ActiveRecord::Base
   def process_events
     if took_off?
       notify_about_takeoff
+      return # Don't need to mention moving; it's implied
     elsif landed?
       notify_about_landing
+      return # Don't need to mention stopped; it's implied
     end
 
     if started_moving?
@@ -108,36 +110,26 @@ class Trackpoint < ActiveRecord::Base
     end
   end
 
-  def now_ish
-    # TODO: This is using server time. But should really be taking the value from
-    # the KML, since polling could make this off by a while, and test data will
-    # not be repeatable
-    Time.now.strftime("%H:%M %Z")
-  end
 
   def notify_about_takeoff
-    msg = "Took off at #{now_ish} #{tweet_text_summary}"
-    logger.info msg
+    msg = "Took off at #{event_time_stamp_string} #{tweet_text_summary}"
     tweet_this msg
   end
 
   def notify_about_landing
-    msg = "Landed at #{now_ish} #{tweet_text_summary}"
-    logger.info msg
+    msg = "Landed at #{event_time_stamp_string} #{tweet_text_summary}"
     tweet_this msg
   end
 
   # TODO: unit test
   def notify_about_started_moving
-    msg = "Moving at #{now_ish} #{tweet_text_summary}"
-    logger.info msg
+    msg = "Moving at #{event_time_stamp_string} #{tweet_text_summary}"
     tweet_this msg
   end
 
   # TODO: unit test
   def notify_about_stopped_moving
-    msg = "Stopped at #{now_ish} #{tweet_text_summary}"
-    logger.info msg
+    msg = "Stopped at #{event_time_stamp_string} #{tweet_text_summary}"
     tweet_this msg
   end
 
@@ -146,6 +138,12 @@ class Trackpoint < ActiveRecord::Base
     tracker_obs = Trackpoint.new
     tracker_obs.populate some_xml
     tracker_obs
+  end
+
+  # @return terrain elevation in feet
+  def terrain_elevation
+    # TODO: should throw if terrain_elevation_meters unavailable
+    Trackpoint.meters_to_feet(terrain_elevation_meters)
   end
 
   def determine_terrain_elevation
@@ -161,14 +159,23 @@ class Trackpoint < ActiveRecord::Base
     #<resolution>76.3516159</resolution>
     #</result>
     #</ElevationResponse>
+    return if terrain_elevation_meters.present?
     gresponse = Net::HTTP::get_response("maps.googleapis.com", "/maps/api/elevation/xml?locations=#{latitude},#{longitude}&sensor=true")
     # TODO: handle case where result isn't HTTPOK
     if gresponse.class == Net::HTTPOK
       gdoc = Nokogiri::XML gresponse.body
       g_elevation_meters = gdoc.xpath("//elevation").text
-      self.terrain_elevation = (Trackpoint.meters_to_feet(g_elevation_meters.to_f)).round.to_s
+      if g_elevation_meters.blank?
+        # This can happen if you're over API limit
+        # TODO: fold this error checking in w/ other
+        ex = RuntimeError.new("Couldn't get terrain elevation from Google #{gresponse.body}")
+        notify_airbrake(ex)
+      end
+      # TODO: this gives terrain_elevation => 0 under error case. Should throw
+      self.terrain_elevation_meters = g_elevation_meters.to_f
     else
       # TODO: needs unit test
+      # TODO: should throw
       ex = RuntimeError.new("Couldn't get terrain elevation from Google #{gresponse}")
       notify_airbrake(ex)
     end
@@ -176,19 +183,23 @@ class Trackpoint < ActiveRecord::Base
 
   def text_summary(last_observation = nil)
     distance_info = "distance #{(distance(last_observation)).to_i} feet" if last_observation
-    "Aloft: #{aloft?} Moving: #{moving?} Fast: #{moving_fast?} Lat: #{latitude} Lon: #{longitude} Alt: #{altitude} Elev: #{terrain_elevation} #{altitude.to_f - terrain_elevation.to_f} #{event_type} #{kml_id} #{distance_info}"
+    "#{event_time_stamp_string}  Aloft: #{aloft?}  Moving: #{moving?}  Alt: #{altitude.round}  Elev: #{terrain_elevation.round}  AGL: #{(altitude - terrain_elevation).round}  #{event_type}  #{distance_info} #{google_maps_url}"
+  end
+
+  def google_maps_url
+    "http://maps.google.com/maps?q=#{latitude},#{longitude}"
   end
 
   def tweet_text_summary(last_observation = nil)
     # TODO: make this do something sensible if the tweet is going to be truncated
-    "Lat: #{latitude} Lon: #{longitude} Alt: #{altitude} Elev: #{terrain_elevation} http://maps.google.com/maps?q=#{latitude},#{longitude}"
+    "Lat: #{latitude} Lon: #{longitude} Alt: #{altitude.round} Elev: #{terrain_elevation.round} #{google_maps_url}"
   end
 
   # @return altitude in feet
   def altitude
     @doc.present? || process
     meters = @doc.xpath("//xmlns:Data[@name='Altitude']/xmlns:value").text
-    (Trackpoint.meters_to_feet(meters.to_f)).round.to_s
+    Trackpoint.meters_to_feet(meters.to_f)
   end
 
   def longitude
@@ -205,7 +216,7 @@ class Trackpoint < ActiveRecord::Base
   def ground_velocity
     @doc.present? || process
     kph = @doc.xpath("//xmlns:Data[@name='GroundVelocity']/xmlns:value").text
-    knots = (Trackpoint.kph_to_knots(kph.to_f)).round.to_s
+    Trackpoint.kph_to_knots(kph.to_f)
   end
 
   def event_type
@@ -217,6 +228,19 @@ class Trackpoint < ActiveRecord::Base
   def kml_id
     @doc.present? || process
     @doc.xpath("//xmlns:Data[@name='Id']/xmlns:value").text
+  end
+
+  # @return a DateTime from the trackpoint (as reported by the service)
+  def event_time_stamp
+    @doc.present? || process
+    timestamp_string = @doc.xpath("//xmlns:Data[@name='EventTimeStamp']/xmlns:value").text
+    DateTime.strptime(timestamp_string, '%m/%d/%Y %I:%M:%S %p')
+  end
+
+  def event_time_stamp_string
+    #event_time_stamp.strftime "%d %H:%M %Z"
+    # TODO: figure out how timezone is set. Probably a setting on DeLorme
+    event_time_stamp.strftime "%H:%M"
   end
 
   # @return distance in feet between self and argument
@@ -233,8 +257,8 @@ class Trackpoint < ActiveRecord::Base
   end
 
   # @return true if recorded altitude AGL >= the argument
-  def aloft?(an_altitude = 100.0)
-    (altitude.to_f - terrain_elevation.to_f) >= an_altitude
+  def aloft?(an_altitude = 300.0)
+    (altitude - terrain_elevation) >= an_altitude
   end
 
   def aground?(an_altitude = 100.0)
@@ -242,12 +266,14 @@ class Trackpoint < ActiveRecord::Base
   end
 
   def moving?
-    ground_velocity.to_f > 0.0
+    ground_velocity > 0.0
   end
+
+  # TODO: would it be useful to have a #moved? message that indicates position differs from last observation?
 
   # @return true if recorded velocity >= the argument
   def moving_fast?(a_velocity = 50.0)
-    ground_velocity.to_f > a_velocity
+    ground_velocity > a_velocity
   end
 
   def landed?

@@ -23,6 +23,12 @@ describe Trackpoint do
   #  end
   #end
 
+  it "should know timestamp from the trackpoint data" do
+    f = File.read "spec/data/landing_1.xml"
+    tox = Trackpoint.make(f)
+    tox.event_time_stamp.should == DateTime.new(2013, 10, 20, 16, 15, 15)# DateTime.strptime("10/20/2013 4:15:15 PM", '%m/%d/%Y %I:%M:%S %p')
+  end
+
   it "should poll" do
     VCR.use_cassette('synopsis', :record => :none) do # options :record [:all, :none, :new_episodes, :once]
       to = Trackpoint.poll
@@ -35,7 +41,7 @@ describe Trackpoint do
   it "should figure if I'm going fast" do
     f = File.read "spec/data/2013-09-05-c16-24-26.xml"
     tox = Trackpoint.make(f)
-    tox.ground_velocity.should == "34"
+    tox.ground_velocity.should == 33.5313297
     tox.response.should_not be_nil
     tox.should_not be_moving_fast
   end
@@ -113,9 +119,10 @@ describe Trackpoint do
   it "should use feet and knots" do
     f = File.read "spec/data/landing_1.xml"
     b = Trackpoint.make(f)
-    b.ground_velocity.should == "75"
-    b.altitude.should == "4500"
-    b.terrain_elevation.should == "2305"
+    b.ground_velocity.should == 74.5680617
+    b.altitude.should == 4500.3938448
+    b.terrain_elevation.should == 2305
+  end
   end
 
   it "should tweet altitudes and elevations in feet, not meters" do

@@ -25,11 +25,11 @@ ActiveRecord::Schema.define(:version => 20130920222701) do
   add_index "settings", ["target_type", "target_id", "var"], :name => "index_settings_on_target_type_and_target_id_and_var", :unique => true
 
   create_table "trackpoints", :force => true do |t|
-    t.string   "response",          :limit => 8000
-    t.string   "terrain_elevation"
+    t.string   "response",                 :limit => 8000
+    t.float    "terrain_elevation_meters"
     t.datetime "processed_at"
-    t.datetime "created_at",                        :null => false
-    t.datetime "updated_at",                        :null => false
+    t.datetime "created_at",                               :null => false
+    t.datetime "updated_at",                               :null => false
   end
 
 end
