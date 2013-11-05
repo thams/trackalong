@@ -123,6 +123,14 @@ describe Trackpoint do
     b.altitude.should == 4500.3938448
     b.terrain_elevation.should == 2305
   end
+
+  it "should handle Google API over limit properly" do
+    VCR.use_cassette('synopsis') do
+      f = File.read "spec/data/google_over_api_count.xml"
+      b = Trackpoint.make(f)
+      # lambda { b.terrain_elevation }.should raise_error(RuntimeError)
+      b.terrain_elevation.should be_nil
+    end
   end
 
   it "should tweet altitudes and elevations in feet, not meters" do

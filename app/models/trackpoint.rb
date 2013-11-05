@@ -140,9 +140,9 @@ class Trackpoint < ActiveRecord::Base
     tracker_obs
   end
 
-  # @return terrain elevation in feet
+  # @return terrain elevation in feet, nil if elevation couldn't be determined
   def terrain_elevation
-    # TODO: should throw if terrain_elevation_meters unavailable
+    return nil unless terrain_elevation_meters.present?
     Trackpoint.meters_to_feet(terrain_elevation_meters)
   end
 
@@ -170,9 +170,9 @@ class Trackpoint < ActiveRecord::Base
         # TODO: fold this error checking in w/ other
         ex = RuntimeError.new("Couldn't get terrain elevation from Google #{gresponse.body}")
         notify_airbrake(ex)
+      else
+        self.terrain_elevation_meters = g_elevation_meters.to_f
       end
-      # TODO: this gives terrain_elevation => 0 under error case. Should throw
-      self.terrain_elevation_meters = g_elevation_meters.to_f
     else
       # TODO: needs unit test
       # TODO: should throw
@@ -257,7 +257,9 @@ class Trackpoint < ActiveRecord::Base
   end
 
   # @return true if recorded altitude AGL >= the argument
+  # TODO: how to deal with case where it is "unknown" because terrain_elevation wasn't available?
   def aloft?(an_altitude = 300.0)
+    return false unless terrain_elevation # until we figure how to deal with missing terrain_elevation data
     (altitude - terrain_elevation) >= an_altitude
   end
 

@@ -15,6 +15,7 @@ TODO
 * Use VCR's filter_sensitive_data feature to remove API keys
     What is proper way to isolate some, but not all VCR requests?
     https://groups.google.com/forum/?fromgroups=#!topic/vcr-ruby/OZfZR5OROdc
+* Put google API keys in for terrain elevation calls
 
 
 Features TODO
