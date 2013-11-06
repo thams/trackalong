@@ -121,7 +121,7 @@ describe Trackpoint do
     b = Trackpoint.make(f)
     b.ground_velocity.should == 74.5680617
     b.altitude.should == 4500.3938448
-    b.terrain_elevation.should == 2305
+    b.terrain_elevation.should == 2304.63611049376
   end
 
   it "should handle Google API over limit properly" do
@@ -136,7 +136,7 @@ describe Trackpoint do
   it "should tweet altitudes and elevations in feet, not meters" do
     f = File.read "spec/data/landing_1.xml" # needs the fields for the tweet description.
     b = Trackpoint.make(f)
-    b.should_receive(:tweet_this).with(/Alt: 4500 Elev: 2305/).twice # twice: one for takeoff and one for moving
+    b.should_receive(:tweet_this).with(/Alt: 4500 Elev: 2305/)
     b.stub(:took_off?).and_return true
     b.process
     b.process_events

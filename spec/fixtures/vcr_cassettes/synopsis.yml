@@ -145,4 +145,47 @@ http_interactions:
         daily request quota for this API.</error_message>\n</ElevationResponse>\n"
     http_version: 
   recorded_at: Tue, 05 Nov 2013 04:18:51 GMT
+# for "should poll"
+- request:
+    method: get
+    uri: http://maps.googleapis.com/maps/api/elevation/xml?locations=36.857135,-121.520075&sensor=true
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - ! '*/*'
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/xml; charset=UTF-8
+      Date:
+      - Wed, 06 Nov 2013 00:49:30 GMT
+      Expires:
+      - Thu, 07 Nov 2013 00:49:30 GMT
+      Cache-Control:
+      - public, max-age=86400
+      Server:
+      - mafe
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Frame-Options:
+      - SAMEORIGIN
+      Alternate-Protocol:
+      - 80:quic
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: US-ASCII
+      string: ! "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ElevationResponse>\n
+        <status>OK</status>\n <result>\n  <location>\n   <lat>36.8571350</lat>\n   <lng>-121.5200750</lng>\n
+        \ </location>\n  <elevation>57.7094727</elevation>\n  <resolution>4.7719760</resolution>\n
+        </result>\n</ElevationResponse>\n"
+    http_version: 
+  recorded_at: Wed, 06 Nov 2013 00:49:29 GMT
 recorded_with: VCR 2.2.2
