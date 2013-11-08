@@ -36,6 +36,8 @@ gem "geocoder" # git://github.com/alexreisner/geocoder.git or http://www.rubygeo
 # Parse KML files (and do other things)
 gem "georuby", :git => "git://github.com/nofxx/georuby.git"
 
+gem "daemons-rails", :git => 'git://github.com/mirasrael/daemons-rails.git'
+
 gem "airbrake"
 gem "toadhopper"
 

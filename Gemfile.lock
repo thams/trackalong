@@ -1,4 +1,12 @@
 GIT
+  remote: git://github.com/mirasrael/daemons-rails.git
+  revision: c9fa0f340028b5f033a6b90c1a7baaef2baef4e8
+  specs:
+    daemons-rails (1.2.1)
+      daemons
+      multi_json (~> 1.0)
+
+GIT
   remote: git://github.com/nofxx/georuby.git
   revision: b7831580908b83aeebc01e7289ddd4680b9172ab
   specs:
@@ -44,6 +52,7 @@ GEM
     columnize (0.3.6)
     connection_pool (1.0.0)
     crack (0.3.2)
+    daemons (1.1.9)
     db_fixtures_dump (0.0.9)
     diff-lcs (1.1.3)
     erubis (2.7.0)
@@ -149,6 +158,7 @@ PLATFORMS
 
 DEPENDENCIES
   airbrake
+  daemons-rails!
   db_fixtures_dump
   geocoder
   georuby!
