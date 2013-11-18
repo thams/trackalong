@@ -6,7 +6,7 @@ require ENV["RAILS_ENV_PATH"]
 # Note: this doesn't log ActionController, ActionMailer, other rails loggers. See
 # https://github.com/synth/Daemonator
 logger = ActiveSupport::BufferedLogger.new(
-  File.join(Rails.root, "log", "pftserver.log"),Logger::INFO)
+  File.join(Rails.root, "log", "trackalong_daemon.log"),Logger::INFO)
 Rails.logger = logger
 ActiveRecord::Base.logger = logger
 
