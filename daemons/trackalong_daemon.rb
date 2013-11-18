@@ -35,6 +35,7 @@ rescue  => e
     if last_error_time < 12.minutes.ago
       error_count = 0
     end
+    sleep 60 # Need this or the retries just fire off a flood. # TODO Unit test
     retry
   end
   notify_airbrake(Exception.new("Trackalong daemon gave up with error_count = #{error_count}"))
