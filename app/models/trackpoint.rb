@@ -44,37 +44,47 @@ class Trackpoint < ActiveRecord::Base
   def self.poll(some_xml = nil)
     # TODO: needs test coverage using vcr
 
-    unless some_xml
-      delorme_api_url = Trackalong::Application.config.delorme_api_url # typically, https://explore.delorme.com/Feed/Share/#{USERNAME}
-      # See https://support.delorme.com/kb/articles/26-about-inreach-kml-feeds
-      # Also see API docs https://support.delorme.com/WebHelp/xmap7/delorme_help/z3_using_the_xmap_api_command_window/api_commands_and_parameters_x.htm
-      # other data available in "https://explore.delorme.com/Feed/ShareLoader/#{USERNAME}"
-      uri = URI.parse delorme_api_url
-      http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = true
-      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      request = Net::HTTP::Get.new(uri.request_uri)
-      response = http.request(request)
-      some_xml = response.body
-      # TODO: pay attention to response.status and do something sensible if it isn't happy
-      # response["header-here"] # All headers are lowercase
-    end
+    begin
 
-    # TODO: this is not correct if items aren't loaded in order, or if tracking more than one user.
-    last_observation = Trackpoint.last
+      unless some_xml
+        delorme_api_url = Trackalong::Application.config.delorme_api_url # typically, https://explore.delorme.com/Feed/Share/#{USERNAME}
+        # See https://support.delorme.com/kb/articles/26-about-inreach-kml-feeds
+        # Also see API docs https://support.delorme.com/WebHelp/xmap7/delorme_help/z3_using_the_xmap_api_command_window/api_commands_and_parameters_x.htm
+        # other data available in "https://explore.delorme.com/Feed/ShareLoader/#{USERNAME}"
+        uri = URI.parse delorme_api_url
+        http = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl = true
+        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        request = Net::HTTP::Get.new(uri.request_uri)
+        response = http.request(request)
+        some_xml = response.body
+        # TODO: pay attention to response.status and do something sensible if it isn't happy
+        # response["header-here"] # All headers are lowercase
+      end
 
-    trpt = Trackpoint.make(some_xml)
+      # TODO: this is not correct if items aren't loaded in order, or if tracking more than one user.
+      last_observation = Trackpoint.last
 
-    if trpt.kml_id == last_observation.try(:kml_id)
-      # Don't save it if it isn't a new data point
+      trpt = Trackpoint.make(some_xml)
+
+      if trpt.kml_id == last_observation.try(:kml_id)
+        # Don't save it if it isn't a new data point
+        return trpt
+      end
+
+      trpt.save!
+
+      trpt.process_events
+
       return trpt
+
+    rescue Exception => ex
+      # TODO shouldn't need such a broad rescue here, but need to log the returned xml if something goes
+      # haywire for diagnosis
+      logger.warn("Exception encountered when polling, #{ex.backtrace} XML was: #{some_xml}")
+      raise ex
     end
 
-    trpt.save!
-
-    trpt.process_events
-
-    return trpt
 
   end
 
