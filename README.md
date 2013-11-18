@@ -16,6 +16,7 @@ TODO
     What is proper way to isolate some, but not all VCR requests?
     https://groups.google.com/forum/?fromgroups=#!topic/vcr-ruby/OZfZR5OROdc
 * Put google API keys in for terrain elevation calls
+* Consider using ErrBit instead of AirBrake for exception notification https://github.com/errbit/errbit
 
 
 Features TODO
