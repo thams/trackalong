@@ -69,9 +69,11 @@ class Trackpoint < ActiveRecord::Base
 
       if trpt.kml_id == last_observation.try(:kml_id)
         # Don't save it if it isn't a new data point
+        logger.info("Not saving Trackpoint #{trpt.id} / #{trpt.kml_id}")
         return trpt
       end
 
+      logger.info("Saving Trackpoint #{trpt.id} / #{trpt.kml_id}")
       trpt.save!
 
       trpt.process_events

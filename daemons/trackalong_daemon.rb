@@ -5,25 +5,23 @@ require ENV["RAILS_ENV_PATH"]
 # Via http://blog.trikeapps.com/2011/05/12/daemonize-rails-3-scripts.html
 # Note: this doesn't log ActionController, ActionMailer, other rails loggers. See
 # https://github.com/synth/Daemonator
-logger = ActiveSupport::BufferedLogger.new(
-  File.join(Rails.root, "log", "trackalong_daemon.log"),Logger::INFO)
-Rails.logger = logger
-ActiveRecord::Base.logger = logger
+
+
+logger = Trackalong::Application.config.logger
+#Rails.logger = logger # Is this needed in addition to ActiveRecord::Base.logger?
 
 #Rails.logger.auto_flushing = true
 
 include NotifyAirbrake
 
-# TODO: logger instead of print
-p "Environment: #{Rails.env}"
+logger.info("Daemon starting in environment: #{Rails.env}")
 
 error_count = 0
 last_error_time = Time.now
 
 begin
   loop {
-    # TODO: logger instead of print
-    p "#{Time.now} #{Trackpoint.last.id if Trackpoint.last} "
+    logger.info "Looping. Last Trackpoint ID: #{Trackpoint.last.id if Trackpoint.last} "
     Trackpoint.poll
     sleep 60
   }

@@ -6,6 +6,30 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(:default, Rails.env) if defined?(Bundler)
 
+class TimeStampedLogger < ActiveSupport::BufferedLogger
+  def add(severity, message = nil, progname = nil, &block)
+  # also see ideas here:
+  # https://gist.github.com/rickyah/1999991#file-rails-add-timestamps-to-logs
+
+          level = {
+            0 => "DEBUG",
+            1 => "INFO",
+            2 => "WARN",
+            3 => "ERROR",
+            4 => "FATAL"
+          }[severity] || "U"
+
+    now = Time.now
+    message = "[%5s %s] %s" % [level,
+                               now.strftime("%m-%d %H:%M:%S") + (".%03d" % (now.to_f*1000.to_i%1000)),     #use "%m-%d %H:%M:%S.%3N" in rails 1.9
+                               message]
+
+    message = "#{message}" unless message[-1] == ?\n
+    super(severity, message, progname, &block)
+  end
+end
+
+
 module Trackalong
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
@@ -62,6 +86,12 @@ module Trackalong
     # x = Dir["#{config.root}/lib", "#{config.root}/lib/**/"] # if you want subdirs
     x = Dir["#{config.root}/lib"]
     config.autoload_paths += x
+
+    config.log_level = :info
+    config.logger = TimeStampedLogger.new(config.paths["log"].first)
+    config.logger.level = TimeStampedLogger.const_get(config.log_level.to_s.upcase)
+    ActiveRecord::Base.logger = config.logger
+
 
   end
 end
