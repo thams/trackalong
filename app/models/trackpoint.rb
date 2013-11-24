@@ -26,10 +26,10 @@ class Trackpoint < ActiveRecord::Base
     # TODO: unit test case for Nokogiri::XML::SyntaxError
     return if self.response.blank?
     begin
-    @doc = Nokogiri::XML(response) do |config|
-      config.options = 0 # Nokogiri::XML::ParseOptions.STRICT
-    end
-    determine_terrain_elevation
+      @doc = Nokogiri::XML(response) do |config|
+        config.options = 0 # Nokogiri::XML::ParseOptions.STRICT
+      end
+      determine_terrain_elevation
     rescue Nokogiri::XML::SyntaxError => ex
       logger.warn("#{ex} during attempt to parse: #{response}")
       raise(ex)
@@ -78,8 +78,9 @@ class Trackpoint < ActiveRecord::Base
         return trpt
       end
 
-      logger.info("Saving Trackpoint #{trpt.id} / #{trpt.kml_id}")
       trpt.save!
+
+      logger.info("Saving Trackpoint id=#{trpt.id} kml_id=#{trpt.kml_id} delay=#{(Time.now - trpt.event_time_stamp).round}")
 
       trpt.process_events
 
