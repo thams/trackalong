@@ -23,12 +23,17 @@ class Trackpoint < ActiveRecord::Base
   # assumes self.response is filed
   # sets up @doc so accessors can work
   def process
-    # TODO: test case for Nokogiri::XML::SyntaxError
+    # TODO: unit test case for Nokogiri::XML::SyntaxError
     return if self.response.blank?
+    begin
     @doc = Nokogiri::XML(response) do |config|
       config.options = 0 # Nokogiri::XML::ParseOptions.STRICT
     end
     determine_terrain_elevation
+    rescue Nokogiri::XML::SyntaxError => ex
+      logger.warn("#{ex} during attempt to parse: #{response}")
+      raise(ex)
+    end
   end
 
   def populate(some_xml)
