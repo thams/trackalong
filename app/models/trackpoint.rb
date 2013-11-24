@@ -246,7 +246,9 @@ class Trackpoint < ActiveRecord::Base
   def event_time_stamp
     @doc.present? || process
     timestamp_string = @doc.xpath("//xmlns:Data[@name='EventTimeStamp']/xmlns:value").text
-    DateTime.strptime(timestamp_string, '%m/%d/%Y %I:%M:%S %p')
+    # TODO: How to get timezone of the user. Shouldn't assume it's Pacific
+    timezone = Time.now.dst? ? "PDT" : "PST"
+    DateTime.strptime("#{timestamp_string} #{timezone}", '%m/%d/%Y %I:%M:%S %p %Z')
   end
 
   def event_time_stamp_string
