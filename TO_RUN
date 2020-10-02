@@ -1,1 +1,0 @@
-RAILS_ENV=production script/daemon start trackalong_daemon.rb
