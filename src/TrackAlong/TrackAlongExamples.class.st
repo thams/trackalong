@@ -19,15 +19,18 @@ TrackAlongExamples >> pullFromDeLorme [
 	<gtExample>
 	<gtDescription: 'should get latest events'>
 	"TODO: make this pull from stored archive."
-	| points flightTrack |
-	"https://share.delorme.com/feed/Share/KurtThams?d1=2020-08-22T03:07Z&d2=2020-08-25T20:04Z"
+	| points flightTrack pilotName |
+	
+"https://share.delorme.com/feed/Share/KurtThams?d1=2020-08-22T03:07Z&d2=2020-08-25T20:04Z"
 	points := TrackAlong
 		poll: 'KurtThams'
 		oldest: '2020-08-25T00:47:45Z'
 		newest: '2020-08-25T00:49:45Z'.
 	self assert: points size equals: 2.
 	self assert: (points first differentDataPoint: points last).
-	flightTrack := FlightTrack new pilot: points first pilotName.
+	pilotName := points first pilotName.
+	self assert: pilotName equals: 'Kurt Thams'.
+	flightTrack := FlightTrack new pilot: (pilotName).
 	points do: [ :point | flightTrack add: point ].
 	self assert: flightTrack size equals: 2.
 	^ flightTrack
@@ -71,7 +74,7 @@ TrackAlongExamples >> trackOneLoop [
 	<gtExample>
 	"TODO: Make this a better test case"
 	| track | 
-	track := TrackAlong track: 'KurtThams'.
+	track := TrackAlong trackPilot: 'KurtThams'.
 	self assert: track class equals: FlightTrack.
 	^ track
 

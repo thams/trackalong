@@ -473,7 +473,7 @@ TrackPoint >> longitude [
 
 { #category : #accessing }
 TrackPoint >> pilotName [
-	(myRawXML xpath: '//kml/Document/Folder/name') first contentString trimBoth.
+	^ (myRawXML xpath: '//kml/Document/Folder/name') first contentString trimBoth.
 ]
 
 { #category : #accessing }

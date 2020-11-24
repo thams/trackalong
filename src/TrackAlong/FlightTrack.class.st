@@ -114,7 +114,7 @@ FlightTrack >> landingPoint [
 		ifNone: [ ^ nil ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 FlightTrack >> pilot: aPilot [
 	myPilot := aPilot
 ]

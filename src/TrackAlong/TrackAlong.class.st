@@ -109,13 +109,14 @@ TrackAlong class >> snsARN [
 ]
 
 { #category : #accessing }
-TrackAlong class >> startDaemon: aPilot [
+TrackAlong class >> startDaemon: aPilotIdentifier [
+	"aPilotIdentifier is the string that indicates which pilot on Garmin's system"
 	| process track |
-	track := self track: aPilot.
+	track := self trackPilot: aPilotIdentifier.
 	process := [ [ true ]
 		whileTrue: [ | points |
 			points := TrackAlong
-				poll: aPilot
+				poll: aPilotIdentifier
 				oldest: DateAndTime now - 20 minutes
 				newest: DateAndTime now.
 			points do: [ :point | track add: point ].
@@ -137,7 +138,7 @@ TrackAlong class >> systemLogger [
 ]
 
 { #category : #accessing }
-TrackAlong class >> track: aPilot [
+TrackAlong class >> trackPilot: aPilot [
 	| flightTrack points |
 	flightTrack := FlightTrack new pilot: aPilot.
 	points := TrackAlong poll: aPilot oldest: (DateAndTime now - (10 minutes)) newest: DateAndTime now.
