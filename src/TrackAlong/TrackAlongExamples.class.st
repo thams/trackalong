@@ -31,8 +31,10 @@ TrackAlongExamples >> pullFromDeLorme [
 	pilotName := points first pilotName.
 	self assert: pilotName equals: 'Kurt Thams'.
 	flightTrack := FlightTrack new pilot: (pilotName).
+	self assert: flightTrack trackLogger recordings size equals: 0.
 	points do: [ :point | flightTrack add: point ].
 	self assert: flightTrack size equals: 2.
+	self assert: (flightTrack trackLogger recordings size) > 10.
 	^ flightTrack
 ]
 
@@ -43,6 +45,7 @@ TrackAlongExamples >> rePullFromDeLorme [
 	"TODO: Make this pull from archived event data"
 	| points flightTrack |
 	flightTrack := self pullFromDeLorme.
+	self assert: flightTrack size equals: 2.
 
 	"Do it again for same period; should be no duplicates"
 	points := TrackAlong
@@ -52,10 +55,9 @@ TrackAlongExamples >> rePullFromDeLorme [
 	self assert: points size equals: 2.
 	points do: [ :point | flightTrack add: point ].
 	self assert: flightTrack size equals: 2.
-	self assert: flightTrack trackLogger recordings size equals: 2.
 	self
 		assert:
-			(flightTrack trackLogger recordings first message
+			(flightTrack trackLogger recordings last message
 				beginsWith: 'Got duplicate trackpoint').
 	^ flightTrack
 ]
