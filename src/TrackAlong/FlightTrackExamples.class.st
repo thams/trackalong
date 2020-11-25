@@ -129,7 +129,7 @@ FlightTrackExamples >> dontAddDuplicates [
 	self assert: flightTrack size equals: 1.
 	flightTrack add: tp1.
 	self assert: flightTrack size equals: 1.
-	self assert: (flightTrack trackLogger recordings first message beginsWith: 'Got duplicate trackpoint').
+	self assert: (TrackAlong trackLogger recordings last message beginsWith: 'Got duplicate trackpoint').
 	^ flightTrack
 ]
 

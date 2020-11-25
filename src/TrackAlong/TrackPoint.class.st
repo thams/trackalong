@@ -298,11 +298,8 @@ TrackPoint >> elevation [
 
 { #category : #accessing }
 TrackPoint >> emitNotification: aMessage [
-	self trackLogger
-		runDuring: [ AWSSNS new
-				publishMessage: aMessage
-				arn: TrackAlong snsARN.
-			StringSignal emit: aMessage ]
+	AWSSNS new publishMessage: aMessage arn: TrackAlong snsARN.
+	TrackLoggerSignal emit: aMessage
 ]
 
 { #category : #accessing }
@@ -585,11 +582,6 @@ TrackPoint >> track: aFlightTrack [
 { #category : #accessing }
 TrackPoint >> trackID [
 	^ myTrackID
-]
-
-{ #category : #accessing }
-TrackPoint >> trackLogger [
-	^ myTrack trackLogger
 ]
 
 { #category : #'instance creation' }

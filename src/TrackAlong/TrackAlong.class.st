@@ -6,7 +6,8 @@ Class {
 		'snsARN',
 		'ourLogger',
 		'ourProcesses',
-		'ourSystemLogger'
+		'ourSystemLogger',
+		'ourTrackLogger'
 	],
 	#category : #TrackAlong
 }
@@ -40,6 +41,8 @@ TrackAlong class >> googleAPIKey [
 { #category : #accessing }
 TrackAlong class >> poll: userID [ 
 
+	self trackLogger.
+	self systemLogger.
 	^ self poll: userID oldest: nil newest: nil
 	"TrackPoint request: 'someonesGarminID'"
 
@@ -93,6 +96,7 @@ TrackAlong class >> poll: userID oldest: timeString1 newest: timeString2 [
 TrackAlong class >> reset [
 	"TrackAlong reset"
 	ourLogger := nil.
+	ourTrackLogger := nil.
 	ourProcesses do: [ :process | process terminate ]
 ]
 
@@ -135,6 +139,11 @@ TrackAlong class >> systemLog: aBlock [
 { #category : #accessing }
 TrackAlong class >> systemLogger [
 		^ ourSystemLogger ifNil: [ourSystemLogger := MemoryLogger named: 'TrackAlongSystemLogger'].
+]
+
+{ #category : #accessing }
+TrackAlong class >> trackLogger [
+	^ ourTrackLogger ifNil: [ourTrackLogger := FlightTrackLogger startFor: TrackLoggerSignal]
 ]
 
 { #category : #accessing }

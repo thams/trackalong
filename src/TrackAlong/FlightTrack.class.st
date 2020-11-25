@@ -3,8 +3,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'myTrackpoints',
-		'myPilot',
-		'myLogger'
+		'myPilot'
 	],
 	#category : #TrackAlong
 }
@@ -38,9 +37,8 @@ FlightTrack >> add: newTrackPoint [
 				
 	myTrackpoints
 		detect: [ :aPoint | (aPoint differentDataPoint: newTrackPoint) not ]
-		ifFound: [ myLogger
-				runDuring: [ StringSignal
-						emit: 'Got duplicate trackpoint ' , newTrackPoint trackID asString	"ContextStackSignal" ].
+		ifFound: [ TrackLoggerSignal
+						emit: 'Got duplicate trackpoint ' , newTrackPoint trackID asString	"ContextStackSignal".
 			^ false ].
 	"ifNone:  [ :aPoint |  ]."
 	newTrackPoint track: self.
@@ -60,15 +58,11 @@ FlightTrack >> add: newTrackPoint [
 	self takeoffPoint
 		ifNil: [ tookoff
 				ifTrue: [ last becomeTakeoff ] ]
-		ifNotNil: [ myLogger
-				runDuring:
-					[ "ContextSignal" StringSignal emit: 'Should not have multiple takeoff points' ] ].
+		ifNotNil: [ TrackLoggerSignal emit: 'Should not have multiple takeoff points' ].
 	self landingPoint
 		ifNil: [ landed
 				ifTrue: [ newTrackPoint becomeLanding ] ]
-		ifNotNil: [ myLogger
-				runDuring:
-					[ "ContextSignal" StringSignal emit: 'Should not have multiple landing points' ] ].
+		ifNotNil: [ TrackLoggerSignal emit: 'Should not have multiple landing points'  ].
 	
 ]
 
@@ -104,7 +98,7 @@ FlightTrack >> hasTrackpoint: aTrackpoint [
 FlightTrack >> initialize [
 	super initialize.
 	myTrackpoints := OrderedCollection new.
-	myLogger := MemoryLogger new.
+	
 ]
 
 { #category : #initialization }
@@ -141,9 +135,4 @@ FlightTrack >> takeoffPoint [
 	"the departure point or nil if none"
 	"each track should have only one departure point. If there is a second departure, should be a new track"
 		^ myTrackpoints detect: [:point | point isTakeoff] ifNone: [ ^nil ]
-]
-
-{ #category : #accessing }
-FlightTrack >> trackLogger [
-	^ myLogger
 ]

@@ -19,7 +19,7 @@ TrackAlongExamples >> pullFromDeLorme [
 	<gtExample>
 	<gtDescription: 'should get latest events'>
 	"TODO: make this pull from stored archive."
-	| points flightTrack pilotName |
+	| points flightTrack pilotName recordings |
 	
 "https://share.delorme.com/feed/Share/KurtThams?d1=2020-08-22T03:07Z&d2=2020-08-25T20:04Z"
 	points := TrackAlong
@@ -31,10 +31,10 @@ TrackAlongExamples >> pullFromDeLorme [
 	pilotName := points first pilotName.
 	self assert: pilotName equals: 'Kurt Thams'.
 	flightTrack := FlightTrack new pilot: (pilotName).
-	self assert: flightTrack trackLogger recordings size equals: 0.
+	recordings := TrackAlong trackLogger recordings size.
 	points do: [ :point | flightTrack add: point ].
 	self assert: flightTrack size equals: 2.
-	self assert: (flightTrack trackLogger recordings size) > 10.
+	self assert: (TrackAlong trackLogger recordings size) equals: recordings + 3. 
 	^ flightTrack
 ]
 
@@ -57,7 +57,7 @@ TrackAlongExamples >> rePullFromDeLorme [
 	self assert: flightTrack size equals: 2.
 	self
 		assert:
-			(flightTrack trackLogger recordings last message
+			(TrackAlong trackLogger recordings last message
 				beginsWith: 'Got duplicate trackpoint').
 	^ flightTrack
 ]
