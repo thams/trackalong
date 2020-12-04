@@ -93,6 +93,12 @@ TrackAlong class >> poll: userID oldest: timeString1 newest: timeString2 [
 ]
 
 { #category : #accessing }
+TrackAlong class >> prove [
+	"Just prove that code is loaded"
+	Transcript crShow: 'TrackAlong at ', Time now asString. 
+]
+
+{ #category : #accessing }
 TrackAlong class >> reset [
 	"TrackAlong reset"
 	ourLogger := nil.
