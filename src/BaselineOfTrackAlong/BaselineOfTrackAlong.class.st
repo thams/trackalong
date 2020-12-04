@@ -10,8 +10,9 @@ BaselineOfTrackAlong >> baseline: spec [
 	spec
 		for: #common
 		do: [ spec package: 'TrackAlong'.
-			" spec
+			spec
 				baseline: 'AWS'
 				with:
-					[ spec repository: 'github://thams/aws-sdk-smalltalk/pharo-repository' ]" ]
+					[ "Use envvariable branch; that feature not accepted into master at upstream"
+					  spec repository: 'github://thams/aws-sdk-smalltalk:envvariable/pharo-repository' ] ]
 ]
