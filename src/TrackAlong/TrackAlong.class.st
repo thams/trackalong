@@ -95,7 +95,9 @@ TrackAlong class >> poll: userID oldest: timeString1 newest: timeString2 [
 { #category : #accessing }
 TrackAlong class >> prove [
 	"Just prove that code is loaded"
-	Transcript crShow: 'TrackAlong at ', Time now asString. 
+	Transcript crShow: 'TrackAlong at ', Time now asString.
+	Transcript crShow: 'TrackAlong sending message to SNS'.
+	AWSSNS new publishMessage: ('Proving Trackalong at', Time now asString) arn: TrackAlong snsARN.
 ]
 
 { #category : #accessing }
